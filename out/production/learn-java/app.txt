@@ -1,0 +1,104 @@
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.StringTokenizer;
+
+public class App {
+    public static void main(String[] args) throws FileNotFoundException {
+        // Scanner scanner = new Scanner(System.in);
+        // System.out.println("Enter your name: ");
+        // String name = scanner.nextLine();
+
+        // System.out.println("enter your age");
+        // int age = scanner.nextInt();
+
+        // System.out.println("My name is " + name + " and I am " + age + " years
+        // old.");
+        // scanner.close();
+        String name = "hung";
+        String name2 = name;
+        name2 = "huan";
+        // compare string
+        System.out.println(name.equals(name2));
+
+        Student s = new Student();
+        s.testCallback(() -> {
+            return 1;
+        });
+
+        ArrayList<Student> list = new ArrayList<>();
+        list.sort((o1, o2) -> o1.getAge() - o2.getAge());
+
+        // FileInputStream fis = new FileInputStream("asdasd");
+        // Scanner sc = new Scanner(fis);
+
+        // sc.close();
+        // fis.close();
+
+        // FileOutputStream fos = new FileOutputStream("asdasd");
+        // PrintWriter pw = new PrintWriter(fos);
+
+        // pw.close();
+        // fos.close();
+
+        String s1 = "asdfasd" + "qasdasd";
+        StringBuilder sb = new StringBuilder("asdasd");
+        sb.append("asdasdasd");
+        StringTokenizer st = new StringTokenizer("asdasd asdasd asdasd", " ");
+        while (st.hasMoreTokens()) {
+            System.out.println(st.nextToken());
+        }
+
+        // int Integer warp
+        Integer a = 1;
+
+        // unboxing
+        int b = a;
+
+        Integer[] arr = new Integer[] { 1, 2, 3, 4, 5 };
+        List<Integer> l = Arrays.asList(arr);
+
+    }
+
+}
+
+class StudentComparator implements Comparator<Student> {
+
+    @Override
+    public int compare(Student o1, Student o2) {
+        // TODO Auto-generated method stub
+        return o1.getAge() - o2.getAge();
+    }
+
+}
+
+class Student implements Comparable<Student> {
+    private int age;
+
+    public int getAge() {
+        return age;
+    }
+
+    public void testCallback(StudentTestCallback cb) {
+        cb.testStudentCallback();
+    }
+
+    @Override
+    public int compareTo(Student s) {
+        // TODO Auto-generated method stub
+        return this.age - s.age;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        // TODO Auto-generated method stub
+        return this.age == ((Student) obj).age;
+    }
+
+}
+
+interface StudentTestCallback {
+    int testStudentCallback();
+}
