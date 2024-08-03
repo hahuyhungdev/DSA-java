@@ -1,27 +1,18 @@
-import java.util.Scanner;
+import dsa.DefaultDoublyLinkedList;
 
 public class App {
-    public static void main(String[] args)  {
-            Scanner scanner = new Scanner(System.in);
-        try {
-            System.out.println("Enter your name: ");
-            String name = scanner.nextLine();
 
-            System.out.println("enter your age");
-            int age = scanner.nextInt();
+  public static void main(String[] args) {
+    DefaultDoublyLinkedList<String> list = new DefaultDoublyLinkedList<>();
 
-            System.out.println("My name is " + name + " and I am " + age + " years old.");
-        }
-        catch (java.util.InputMismatchException e) {
-            System.out.println("Please enter a valid age");
-        }
-        catch (Exception e) {
-            System.out.println("An error occurred");
-        }
-        finally {
-            scanner.close();
-        }
+    // Thêm phần tử vào danh sách
+    list.addFirst("Hello");
+    list.addFirst(null);
+    list.addLast("World");
+    list.addLast("World1");
+    list.remove("World");
+    System.out.println("List" + list);
+//    Node<String> nodeToRemove = list.findNode("World");
 
-    }
-
+  }
 }
