@@ -31,8 +31,8 @@ public class DefaultDoublyLinkedList<T> implements DoublyLinkedList<T> {
   public Node<T> findNode(T data) {
     Node<T> currentNode = head;
     while (currentNode != null) {
-      if (currentNode.getData().equals(data)) {
-        System.out.println("Node with value " + data + " found");
+      if (isEquals(currentNode.getData(), data)) {
+        System.out.println("Node with value " + data + " FOUNDED");
         return currentNode;
       }
       currentNode = currentNode.getNext();
@@ -140,6 +140,7 @@ public class DefaultDoublyLinkedList<T> implements DoublyLinkedList<T> {
     if (node == null) {
       throw new IllegalArgumentException("Node is null");
     }
+    System.out.println("Node to remove: " + node + " with value: " + head);
     if (node == head) {
       return removeFirst();
     }
@@ -157,13 +158,11 @@ public class DefaultDoublyLinkedList<T> implements DoublyLinkedList<T> {
     return data;
   }
 
-  private boolean isEquals(T data, Object object) {
-    if (object == null) {
-      return data == null;
+  private boolean isEquals(T nodeData, Object searchData) {
+    if (searchData == null) {
+      return nodeData == null;
     }
-    // compare current data with the object <=> object
-    boolean isEquals = object.equals(data);
-    return isEquals;
+    return searchData.equals(nodeData);
   }
 
   @Override
@@ -211,31 +210,40 @@ public class DefaultDoublyLinkedList<T> implements DoublyLinkedList<T> {
 //  }
 
   @Override
-  public T removeAt(int index) {
-    if (index < 0 || index >= size) {
+  public T removeAt(int indexRm) {
+    if (indexRm < 0 || indexRm >= size) {
       throw new IllegalArgumentException();
     }
-
-    int i;
-    Node<T> currentNode;
-
-    if (index < size / 2) {
-      i = 0;
-      currentNode = head;
-      while (i != index) {
-        currentNode = currentNode.getNext();
-        i++;
-      }
-    } else {
-      i = size - 1;
-      currentNode = tail;
-      while (i != index) {
-        currentNode = currentNode.getPrev();
-        i--;
-      }
+    if (indexRm == 0) {
+      return removeFirst();
+    }
+    if (indexRm == size - 1) {
+      return removeLast();
     }
 
-    return remove(currentNode);
+    Node<T> nodeToRemove;
+    if (indexRm < size / 2) {
+      nodeToRemove = getNodeFromStart(indexRm);
+    } else {
+      nodeToRemove = getNodeFromEnd(indexRm);
+    }
+    return remove(nodeToRemove);
+  }
+
+  private Node<T> getNodeFromStart(int index) {
+    Node<T> currentNode = head;
+    for (int i = 0; i < index; i++) {
+      currentNode = currentNode.getNext();
+    }
+    return currentNode;
+  }
+
+  private Node<T> getNodeFromEnd(int index) {
+    Node<T> currentNode = tail;
+    for (int i = size - 1; i > index; i--) {
+      currentNode = currentNode.getPrev();
+    }
+    return currentNode;
   }
 
   @Override
@@ -259,6 +267,21 @@ public class DefaultDoublyLinkedList<T> implements DoublyLinkedList<T> {
         currentNode = currentNode.getNext();
         index++;
       }
+    }
+    return -1;
+  }
+
+
+  public int findIndexOfNode(Object obj) {
+    int index = 0;
+    Node<T> currentNode = head;
+
+    while (currentNode != null) {
+      if (isEquals(currentNode.getData(), obj)) {
+        return index;
+      }
+      currentNode = currentNode.getNext();
+      index++;
     }
     return -1;
   }

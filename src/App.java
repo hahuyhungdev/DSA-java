@@ -7,12 +7,11 @@ public class App {
 
     // Thêm phần tử vào danh sách
     list.addFirst("Hello");
-    list.addFirst(null);
+//    list.addFirst(null);
     list.addLast("World");
     list.addLast("World1");
-    list.remove("World");
-    System.out.println("List" + list);
-//    Node<String> nodeToRemove = list.findNode("World");
-
+    System.out.println("list = " + list);
+    list.removeAt(1);
+    System.out.println("list = " + list);
   }
 }
