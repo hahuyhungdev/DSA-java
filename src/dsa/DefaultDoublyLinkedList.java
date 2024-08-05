@@ -140,7 +140,7 @@ public class DefaultDoublyLinkedList<T> implements DoublyLinkedList<T> {
     if (node == null) {
       throw new IllegalArgumentException("Node is null");
     }
-    System.out.println("Node to remove: " + node + " with value: " + head);
+    System.out.println("Node to remove: " + node);
     if (node == head) {
       return removeFirst();
     }
@@ -185,29 +185,6 @@ public class DefaultDoublyLinkedList<T> implements DoublyLinkedList<T> {
     }
     return false;
   }
-//  @Override
-//  public boolean remove(Object object) {
-//    Node<T> currentNode = head;
-//
-//    if(object == null){
-//      while (currentNode != null){
-//        if(currentNode.getData() == null){
-//          remove(currentNode);
-//          return true;
-//        }
-//        currentNode = currentNode.getNext();
-//      }
-//    }else{
-//      while (currentNode != null){
-//        if(currentNode.getData() == object){
-//          remove(currentNode);
-//          return true;
-//        }
-//        currentNode = currentNode.getNext();
-//      }
-//    }
-//    return false;
-//  }
 
   @Override
   public T removeAt(int indexRm) {
@@ -246,33 +223,7 @@ public class DefaultDoublyLinkedList<T> implements DoublyLinkedList<T> {
     return currentNode;
   }
 
-  @Override
-  public int indexOf(Object object) {
-    int index = 0;
-    Node<T> currentNode = head;
-
-    if (object == null) {
-      while (currentNode != null) {
-        if (currentNode.getData() == null) {
-          return index;
-        }
-        currentNode = currentNode.getNext();
-        index++;
-      }
-    } else {
-      while (currentNode != null) {
-        if (currentNode.getData() == object) {
-          return index;
-        }
-        currentNode = currentNode.getNext();
-        index++;
-      }
-    }
-    return -1;
-  }
-
-
-  public int findIndexOfNode(Object obj) {
+  public int indexOf(Object obj) {
     int index = 0;
     Node<T> currentNode = head;
 
@@ -293,29 +244,21 @@ public class DefaultDoublyLinkedList<T> implements DoublyLinkedList<T> {
 
   @Override
   public Iterator<T> iterator() {
-    return new Iterator<>() {
-      private boolean isEntering = true;
-      private Node<T> currentNode = null;
+    return new Iterator<T>() {
+      private Node<T> currentNode = head;
 
       @Override
       public boolean hasNext() {
-        if (isEntering) {
-          return head != null;
-        }
-        return currentNode.getNext() != null;
+        return currentNode != null;
       }
 
       @Override
       public T next() {
-        T data = null;
-        if (isEntering) {
-          data = head.getData();
-          currentNode = head;
-          isEntering = false;
-        } else {
-          currentNode = currentNode.getNext();
-          data = currentNode.getData();
+        if (!hasNext()) {
+          throw new IllegalArgumentException("No more element");
         }
+        T data = currentNode.getData();
+        currentNode = currentNode.getNext();
         return data;
       }
     };
@@ -342,4 +285,19 @@ public class DefaultDoublyLinkedList<T> implements DoublyLinkedList<T> {
       return sb.toString();
     }
   }
+
+  // run DefaultDoublyLinkedList class demo
+  public static void main(String[] args) {
+    DefaultDoublyLinkedList<String> list = new DefaultDoublyLinkedList<>();
+
+    // Thêm phần tử vào danh sách
+    list.addFirst("Hello");
+    list.addFirst(null);
+    list.addLast("World");
+    list.addLast("World1");
+    System.out.println("list = " + list);
+    list.removeAt(1);
+    System.out.println("list = " + list);
+  }
 }
+
