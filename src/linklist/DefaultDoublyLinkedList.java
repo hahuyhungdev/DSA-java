@@ -1,4 +1,4 @@
-package dsa;
+package linklist;
 
 import java.util.Iterator;
 

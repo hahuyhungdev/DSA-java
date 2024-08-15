@@ -1,4 +1,4 @@
-package dsa;
+package linklist;
 
 public class Node<T> {
 

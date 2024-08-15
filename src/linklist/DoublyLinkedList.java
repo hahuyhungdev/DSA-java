@@ -1,4 +1,4 @@
-package dsa;
+package linklist;
 
 public interface DoublyLinkedList<T> extends Iterable<T> {
 
