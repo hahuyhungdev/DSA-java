@@ -2,7 +2,9 @@ package Tree;
 
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
+import java.util.Queue;
 
 import stack.LinkedListBasedStack;
 import stack.StackADT;
@@ -185,12 +187,102 @@ public class BinarySearchTree<T extends Comparable<T>> implements TreeADT<T> {
     };
   }
 
-  private Iterator<T> levelOrderTraverse() {
-    return null;
+  private Iterator<T> postOrderTraverse() {
+    final int expectedCount = nodeCount;
+    final StackADT<Node<T>> stack = new LinkedListBasedStack<>();
+    // final Stack<Node<T>> stack = new Stack<>();
+
+    return new Iterator<T>() {
+      private Node<T> lastVisitedNode = null;
+      private Node<T> currentNode = root;
+
+      private void checkForModification() {
+        if (expectedCount != nodeCount) {
+          throw new ConcurrentModificationException();
+        }
+      }
+
+      @Override
+
+      public boolean hasNext() {
+        checkForModification();
+        return !stack.isEmpty() || currentNode != null;
+      }
+
+      @Override
+      public T next() {
+        checkForModification();
+        if (!hasNext()) {
+          throw new NoSuchElementException();
+        }
+
+        while (currentNode != null) {
+          stack.push(currentNode);
+          currentNode = currentNode.getLeft();
+        }
+
+        Node<T> peekNode = stack.top();
+        // if the right node has been visited or does not exist, visit the current node
+        if (peekNode.getRight() == null || peekNode.getRight() == lastVisitedNode) {
+          stack.pop();
+          lastVisitedNode = peekNode;
+          return peekNode.getData();
+        } else {
+          // if the right node has not been visited, visit the right node
+          currentNode = peekNode.getRight();
+        }
+
+        return next();
+      }
+
+    };
+
   }
 
-  private Iterator<T> postOrderTraverse() {
-    return null;
+  private Iterator<T> levelOrderTraverse() {
+    final int expectedCount = nodeCount;
+    final Queue<Node<T>> queue = new LinkedList<>();
+
+    return new Iterator<T>() {
+      Node<T> currentNode = root;
+
+      private void checkForModification() {
+        if (expectedCount != nodeCount) {
+          throw new ConcurrentModificationException();
+        }
+      }
+
+      @Override
+      public boolean hasNext() {
+        checkForModification();
+        return currentNode != null || !queue.isEmpty();
+      }
+
+      @Override
+      public T next() {
+        checkForModification();
+        if (!hasNext()) {
+          throw new NoSuchElementException();
+        }
+
+        if (currentNode != null) {
+          queue.add(currentNode);
+          currentNode = null; // Ensure that we do not add the root again.
+        }
+
+        Node<T> node = queue.poll();
+        if (node != null) {
+          if (node.getLeft() != null) {
+            queue.add(node.getLeft());
+          }
+          if (node.getRight() != null) {
+            queue.add(node.getRight());
+          }
+        }
+
+        return node.getData();
+      }
+    };
   }
 
   private int height(Node<T> node) {
