@@ -311,9 +311,9 @@ public class BinarySearchTree<T extends Comparable<T>> implements TreeADT<T> {
           throw new ConcurrentModificationException();
         }
       }
- 
+
       @Override
-      public boolean hasNext() {   
+      public boolean hasNext() {
         checkForModification();
         return currentNode != null || !stack.isEmpty();
       }
@@ -334,6 +334,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements TreeADT<T> {
       }
     };
   }
+  // test reflog
 
   /*
    * Cập nhật quá trình duyệt post-order chính xác (nguyên tắc post-order là duyệt
