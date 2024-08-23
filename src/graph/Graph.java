@@ -1,8 +1,11 @@
 package graph;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
+import Queue.LinkedListBasedQueue;
 
 public class Graph implements GraphADT<Integer> {
   private int V; // number of vertices
@@ -35,9 +38,7 @@ public class Graph implements GraphADT<Integer> {
     if (vertex < V) {
       adj[vertex].clear();
       for (List<Integer> edges : adj) {
-        if (edges.contains(vertex)) {
-          edges.remove(Integer.valueOf(vertex));
-        }
+        edges.remove(Integer.valueOf(vertex));
       }
     }
   }
@@ -87,6 +88,7 @@ public class Graph implements GraphADT<Integer> {
     };
   }
 
+  // Graph traversal methods
   public void depthFirstSearch(int v) {
     boolean[] visited = new boolean[V];
     depthFirstSearchUtil(v, visited);
@@ -112,6 +114,52 @@ public class Graph implements GraphADT<Integer> {
     }
   }
 
+  public List<Integer> breadthFirstSearch(int start, int end) {
+    int[] prev = getPrev(start);
+    return reconstructPath(prev, start, end);
+  }
+
+  private int[] getPrev(int start) {
+    boolean[] visited = new boolean[V];
+    int[] prev = new int[V];
+    for (int i = 0; i < V; i++) {
+      prev[i] = -1;
+    }
+    LinkedListBasedQueue<Integer> queue = new LinkedListBasedQueue<Integer>(V);
+    visited[start] = true;
+    queue.enQueue(start);
+    while (!queue.isEmpty()) {
+      int currentNode = queue.deQueue();
+      for (int neighbor : adj[currentNode]) {
+        if (!visited[neighbor]) {
+          visited[neighbor] = true;
+          prev[neighbor] = currentNode;
+          queue.enQueue(neighbor);
+        }
+      }
+    }
+    return prev;
+  }
+
+  private List<Integer> reconstructPath(int[] prev, int s, int e) {
+    List<Integer> path = new ArrayList<>();
+    int prevIndex = e;
+
+    while (prevIndex != -1) {
+      path.add(prevIndex);
+      prevIndex = prev[prevIndex];
+    }
+
+    Collections.reverse(path);
+
+    if (path.get(0) != s) {
+      return null;
+    }
+
+    return path;
+  }
+
+  // Utility method
   public void printGraph() {
     for (int i = 0; i < V; i++) {
       System.out.print(i + ": ");
@@ -122,34 +170,24 @@ public class Graph implements GraphADT<Integer> {
     }
   }
 
-  /**
-   * @param args
-   */
+  // Main method for testing
   public static void main(String[] args) {
-    Graph graph = new Graph(4);
-
+    Graph graph = new Graph(6);
     graph.addEdge(0, 1);
     graph.addEdge(0, 2);
-    graph.addEdge(1, 2);
-    graph.addEdge(2, 0);
+    graph.addEdge(1, 3);
     graph.addEdge(2, 3);
-    graph.addEdge(3, 3);
+    graph.addEdge(3, 4);
+    graph.addEdge(3, 5);
 
     System.out.println("Graph structure:");
     graph.printGraph();
 
-    // System.out.println("\nDepth First Search (starting from vertex 2):");
-    // graph.depthFirstSearch(2);
-
-    System.out.println("\n\nDepth First Search for all vertices:");
+    System.out.println("\nDepth First Search for all vertices:");
     graph.depthFirstSearchAll();
 
-    // System.out.println("\n\nRemoving edge 1-2");
-    // graph.removeEdge(1, 2);
-    // graph.printGraph();
-
-    // System.out.println("\nGraph size: " + graph.size());
-    // System.out.println("Has edge 0-1: " + graph.hasEdge(0, 1));
-    // System.out.println("Has edge 1-2: " + graph.hasEdge(1, 2));
+    System.out.println("\nBreadth First Search from 0 to 5:");
+    List<Integer> path = graph.breadthFirstSearch(0, 5);
+    System.out.println(path);
   }
 }
