@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Graph",
+      "request": "launch",
+      "mainClass": "graph.Graph",
+      "projectName": "DSA-java_df0cfa90"
+    },
+    {
+      "type": "java",
       "name": "Current File",
       "request": "launch",
       "mainClass": "${file}"
