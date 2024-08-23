@@ -2,8 +2,11 @@ package graph;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import Queue.LinkedListBasedQueue;
 
@@ -159,6 +162,28 @@ public class Graph implements GraphADT<Integer> {
     return path;
   }
 
+  // DFS Topological Sort
+  private void dfsTopologicalSortUtil(int v, Set<Integer> visited, LinkedList<Integer> result) {
+    visited.add(v);
+    for (int neighbor : adj[v]) {
+      if (!visited.contains(neighbor)) {
+        dfsTopologicalSortUtil(neighbor, visited, result);
+      }
+    }
+    result.addFirst(v);
+  }
+
+  public List<Integer> dfsTopologicalSort() {
+    Set<Integer> visited = new HashSet<>();
+    LinkedList<Integer> result = new LinkedList<>();
+    for (int v = 0; v < V; v++) {
+      if (!visited.contains(v)) {
+        dfsTopologicalSortUtil(v, visited, result);
+      }
+    }
+    return result;
+  }
+
   // Utility method
   public void printGraph() {
     for (int i = 0; i < V; i++) {
@@ -172,22 +197,27 @@ public class Graph implements GraphADT<Integer> {
 
   // Main method for testing
   public static void main(String[] args) {
-    Graph graph = new Graph(6);
-    graph.addEdge(0, 1);
-    graph.addEdge(0, 2);
-    graph.addEdge(1, 3);
-    graph.addEdge(2, 3);
-    graph.addEdge(3, 4);
-    graph.addEdge(3, 5);
+    Graph graph = new Graph(10); // A=0, B=1, C=2, D=3, E=4, F=5, G=6, H=7, I=8, J=9
+    graph.addEdge(2, 0); // C -> A
+    graph.addEdge(3, 1); // D -> B
+    graph.addEdge(0, 1); // A -> B
+    graph.addEdge(1, 4); // B -> E
+    graph.addEdge(1, 6); // B -> G
+    graph.addEdge(4, 5); // E -> F
+    graph.addEdge(5, 6); // F -> G
+    graph.addEdge(6, 7); // G -> H
+    graph.addEdge(6, 8); // G -> I
+    graph.addEdge(7, 8); // H -> I
+    graph.addEdge(8, 9); // I -> J
 
     System.out.println("Graph structure:");
     graph.printGraph();
 
-    System.out.println("\nDepth First Search for all vertices:");
+    System.out.println("DFS");
     graph.depthFirstSearchAll();
 
-    System.out.println("\nBreadth First Search from 0 to 5:");
-    List<Integer> path = graph.breadthFirstSearch(0, 5);
-    System.out.println(path);
+    System.out.println("\nTopological Sort:");
+    List<Integer> topologicalOrder = graph.dfsTopologicalSort();
+    System.out.println(topologicalOrder);
   }
 }
