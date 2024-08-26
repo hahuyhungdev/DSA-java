@@ -1,0 +1,3 @@
+#!/bin/bash
+./.husky/verify-email
+bun run lint-staged

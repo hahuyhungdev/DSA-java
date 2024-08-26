@@ -1,0 +1,19 @@
+{
+  "scripts": {
+    "prepare": "husky",
+    "lint-staged": "lint-staged",
+    "commit": "commit"
+  },
+  "dependencies": {
+    "commit": "^0.0.4",
+    "husky": "^9.1.2"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "lint-staged": "^15.2.7"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": []
+  }
+}
